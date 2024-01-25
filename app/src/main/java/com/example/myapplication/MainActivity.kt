@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -78,17 +79,26 @@ class MainActivity : AppCompatActivity() {
             val movil = binding.etTelefono.text.toString()
             llamar(movil)
         }
-
-        /*binding.btnFoto.setOnClickListener {
-            imageView = binding.ivFoto
-            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            getContent.launch(galleryIntent)
-        }*/
-
+        //Esto es para foto de la galeria
         binding.btnFoto.setOnClickListener {
-            // Abrir la cámara para capturar una imagen
-            val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            takePicture.launch(captureIntent)
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Imagen")
+            builder.setMessage("¿Qué aplicacion deseas abrir?")
+
+            builder.setPositiveButton("Galería"){_, _ ->
+                imageView = binding.ivFoto
+                val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                getContent.launch(galleryIntent)
+            }
+
+            builder.setNegativeButton("Cámara") { _, _ ->
+                // Abrir la cámara para capturar una imagen
+                val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                takePicture.launch(captureIntent)
+            }
+
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 
